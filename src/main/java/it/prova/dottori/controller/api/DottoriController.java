@@ -46,8 +46,8 @@ public class DottoriController {
 	}
 	@PutMapping("/{id}")
 	public DottoreDTO update(@Valid @RequestBody DottoreDTO dottoreInput, @PathVariable(required = true) Long id) {
-		if (dottoreInput.getId() != null)
-			throw new RuntimeException();
+//		if (dottoreInput.getId() != null)
+//			throw new RuntimeException();
 		return dottoreService.aggiorna(dottoreInput);
 	}
 	
@@ -58,7 +58,7 @@ public class DottoriController {
 	}
 	
 	
-	@GetMapping("/{codiceFiscaleP}")
+	@GetMapping("/cercaCodiceFiscalePaziente/{codFiscale}")
 	public DottoreDTO cercaPerCodiceFiscalePaziente(@PathVariable(required = true) String codFiscale) {
 		Dottore result = dottoreService.findByCodFiscalePazienteAttualmenteInVisita(codFiscale);
 
@@ -70,7 +70,7 @@ public class DottoriController {
 	
 	
 	
-	@GetMapping("/verificaDisponibilitaDottore/{codiceFiscaleP}")
+	@GetMapping("/verificaDisponibilitaDottore/{codFiscale}")
 	public DottoreDTO assegnaPaziente(@PathVariable(required = true) String codFiscale) {
 		Dottore result = dottoreService.verificaDisponibilita(codFiscale);
 

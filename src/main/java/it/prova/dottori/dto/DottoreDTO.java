@@ -33,15 +33,15 @@ public class DottoreDTO {
 	private boolean inServizio;
 
 	public Dottore buildDottoreModel() {
-		Dottore result = Dottore.builder().id(this.id).nome(this.nome).cognome(this.cognome)
-				.codFiscalePazienteAttualmenteInVisita(this.codFiscalePazienteAttualmenteInVisita).build();
+		Dottore result = Dottore.builder().id(this.id).nome(this.nome).cognome(this.cognome).codiceDottore(this.codiceDottore)
+				.codFiscalePazienteAttualmenteInVisita(this.codFiscalePazienteAttualmenteInVisita).inVisita(this.inVisita).inServizio(this.inServizio).build();
 		return result;
 	}
 
 	public static DottoreDTO buildDottoreDTOFromModel(Dottore dottoreModel) {
 		DottoreDTO result = DottoreDTO.builder().id(dottoreModel.getId()).nome(dottoreModel.getNome())
 				.cognome(dottoreModel.getCognome())
-				.codFiscalePazienteAttualmenteInVisita(dottoreModel.getCodFiscalePazienteAttualmenteInVisita()).build();
+				.codiceDottore(dottoreModel.getCodiceDottore()).codFiscalePazienteAttualmenteInVisita(dottoreModel.getCodFiscalePazienteAttualmenteInVisita()).inVisita(dottoreModel.isInVisita()).inServizio(dottoreModel.isInServizio()).build();
 		return result;
 	}
 
