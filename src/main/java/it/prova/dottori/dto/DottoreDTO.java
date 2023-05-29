@@ -5,6 +5,8 @@ import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotBlank;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import it.prova.dottori.model.Dottore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,17 +17,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+// Json include, se un dato è nullo non cerrà messo nell'output
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class DottoreDTO {
 
 	private Long id;
 
-	@NotBlank(message = "{nome.notblank}")
 	private String nome;
-	@NotBlank(message = "{cognome.notblank}")
+
 	private String cognome;
+	
 	@NotBlank(message = "{codiceDottore.notblank}")
 	private String codiceDottore;
-	@NotBlank(message = "{codFiscalePazienteAttualmenteInVisita.notblank}")
+
 	private String codFiscalePazienteAttualmenteInVisita;
 
 	private boolean inVisita;
@@ -34,20 +38,19 @@ public class DottoreDTO {
 
 	public Dottore buildDottoreModel() {
 		Dottore result = Dottore.builder().id(this.id).nome(this.nome).cognome(this.cognome).codiceDottore(this.codiceDottore)
-				.codFiscalePazienteAttualmenteInVisita(this.codFiscalePazienteAttualmenteInVisita).inVisita(this.inVisita).inServizio(this.inServizio).build();
+				.codFiscalePazienteAttualmenteInVisita(this.codFiscalePazienteAttualmenteInVisita).build();
 		return result;
 	}
 
 	public static DottoreDTO buildDottoreDTOFromModel(Dottore dottoreModel) {
 		DottoreDTO result = DottoreDTO.builder().id(dottoreModel.getId()).nome(dottoreModel.getNome())
-				.cognome(dottoreModel.getCognome())
-				.codiceDottore(dottoreModel.getCodiceDottore()).codFiscalePazienteAttualmenteInVisita(dottoreModel.getCodFiscalePazienteAttualmenteInVisita()).inVisita(dottoreModel.isInVisita()).inServizio(dottoreModel.isInServizio()).build();
+				.cognome(dottoreModel.getCognome()).codiceDottore(dottoreModel.getCodiceDottore())
+				.codFiscalePazienteAttualmenteInVisita(dottoreModel.getCodFiscalePazienteAttualmenteInVisita())
+				.inServizio(dottoreModel.isInServizio()).inVisita(dottoreModel.isInVisita()).build();
 		return result;
 	}
 
-	
-	public static List<DottoreDTO> createDottoreDTOListFromModelList(
-			List<Dottore> modelListInput) {
+	public static List<DottoreDTO> createDottoreDTOListFromModelList(List<Dottore> modelListInput) {
 		return modelListInput.stream().map(inputEntity -> {
 			return DottoreDTO.buildDottoreDTOFromModel(inputEntity);
 		}).collect(Collectors.toList());

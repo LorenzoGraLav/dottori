@@ -27,37 +27,37 @@ public class DottoriController {
 
 	@Autowired
 	private DottoreService dottoreService;
-	
+
 	@GetMapping
 	public List<DottoreDTO> visualizzaDottori() {
 		return dottoreService.listAll();
 	}
-	
+
 	@GetMapping("/{id}")
 	public DottoreDTO visualizza(@PathVariable(required = true) Long id) {
 		return dottoreService.caricaSingoloElemento(id);
 	}
-	
+
 	@PostMapping
 	public DottoreDTO createNew(@Valid @RequestBody DottoreDTO dottoreInput) {
 		if (dottoreInput.getId() != null)
 			throw new RuntimeException();
 		return dottoreService.inserisciNuovo(dottoreInput);
 	}
+
 	@PutMapping("/{id}")
 	public DottoreDTO update(@Valid @RequestBody DottoreDTO dottoreInput, @PathVariable(required = true) Long id) {
 //		if (dottoreInput.getId() != null)
 //			throw new RuntimeException();
 		return dottoreService.aggiorna(dottoreInput);
 	}
-	
+
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable(required = true) Long id) {
 		dottoreService.rimuovi(id);
 	}
-	
-	
+
 	@GetMapping("/cercaCodiceFiscalePaziente/{codFiscale}")
 	public DottoreDTO cercaPerCodiceFiscalePaziente(@PathVariable(required = true) String codFiscale) {
 		Dottore result = dottoreService.findByCodFiscalePazienteAttualmenteInVisita(codFiscale);
@@ -67,9 +67,7 @@ public class DottoriController {
 
 		return DottoreDTO.buildDottoreDTOFromModel(result);
 	}
-	
-	
-	
+
 	@GetMapping("/verificaDisponibilitaDottore/{codFiscale}")
 	public DottoreDTO assegnaPaziente(@PathVariable(required = true) String codFiscale) {
 		Dottore result = dottoreService.verificaDisponibilita(codFiscale);
@@ -100,4 +98,18 @@ public class DottoriController {
 				.build();
 		return PazienteEDottoreDTO.buildDottoreDTOFromModel(dottoreService.ricoveraPaziente(dottore));
 	}
+
+	@PutMapping("/cambiaInServizio/{id}")
+	@ResponseStatus(HttpStatus.ACCEPTED)
+	public DottoreDTO cambiaServizio(@PathVariable(required = true) Long id) {
+
+		DottoreDTO dottore = dottoreService.caricaSingoloElemento(id);
+
+		if (dottore == null)
+			throw new RuntimeException("nessun dottore trovato");
+
+		return DottoreDTO.buildDottoreDTOFromModel(dottoreService.cambiaServizio(id));
+
+	}
+
 }
